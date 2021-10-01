@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quiz">
         <activity
+            android:name=".HomeActivity"
+            android:exported="true"
+            android:label="Home"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
