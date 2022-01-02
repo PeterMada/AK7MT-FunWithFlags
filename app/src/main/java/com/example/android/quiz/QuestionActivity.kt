@@ -85,6 +85,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerTwo = findViewById<TextView>(R.id.question_answer_two)
         val answerThree = findViewById<TextView>(R.id.question_answer_three)
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
+        val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
         when(p0?.id) {
             R.id.question_answer_one -> {
@@ -118,6 +119,12 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                     }
 
                     answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
+
+                    if(mCurrentPosition == mQuestionList!!.size) {
+                        buttonSubmit.text = "FINISH"
+                    } else {
+                        buttonSubmit.text = "GO TO NEXT QUESTION"
+                    }
                 }
             }
         }
