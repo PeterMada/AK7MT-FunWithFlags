@@ -5,9 +5,7 @@ import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
@@ -23,6 +21,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerTwo = findViewById<TextView>(R.id.question_answer_two)
         val answerThree = findViewById<TextView>(R.id.question_answer_three)
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
+        val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
         mQuestionList = Constants.getQuestions()
         setQuestion()
@@ -31,6 +30,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         answerTwo.setOnClickListener(this)
         answerThree.setOnClickListener(this)
         answerFour.setOnClickListener(this)
+        buttonSubmit.setOnClickListener(this)
     }
 
     private fun setQuestion() {
@@ -99,6 +99,27 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             R.id.question_answer_four -> {
                 setSelectedAnswer(answerFour, 4)
             }
+            R.id.question_submit -> {
+                if(mSelectedAnswerPosition == 0) {
+                    mCurrentPosition ++
+
+                    when{
+                        mCurrentPosition <= mQuestionList!!.size -> {
+                            setQuestion()
+                        } else -> {
+                            Toast.makeText(this, "Quiz finished", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    val question = mQuestionList?.get(mCurrentPosition - 1)
+
+                    if(question!!.correctAnswer != mSelectedAnswerPosition) {
+                        answerView(mSelectedAnswerPosition, R.drawable.wrong_option_border_bg)
+                    }
+
+                    answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
+                }
+            }
         }
     }
 
@@ -111,6 +132,40 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         tv.background = ContextCompat.getDrawable(
             this,
             R.drawable.selected_option_border_bg)
+    }
 
+    private fun answerView(answer: Int, drawableView: Int) {
+        val answerOne = findViewById<TextView>(R.id.question_answer_one)
+        val answerTwo = findViewById<TextView>(R.id.question_answer_two)
+        val answerThree = findViewById<TextView>(R.id.question_answer_three)
+        val answerFour = findViewById<TextView>(R.id.question_answer_four)
+
+
+        when(answer) {
+            1 -> {
+                answerOne.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+            2 -> {
+                answerTwo.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+            3 -> {
+                answerThree.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+            4 -> {
+                answerFour.background = ContextCompat.getDrawable(
+                    this,
+                    drawableView
+                )
+            }
+        }
     }
 }
