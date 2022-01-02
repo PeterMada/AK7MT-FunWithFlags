@@ -72,7 +72,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         options.add(3, answerFour)
 
         for (option in options) {
-            option.setTextColor(Color.parseColor("@android:color/black"))
+            option.setTextColor(Color.parseColor("#000000"))
             option.typeface = Typeface.DEFAULT
             option.background = ContextCompat.getDrawable(this, R.drawable.default_option_border_bg)
         }
@@ -81,6 +81,36 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
+        val answerOne = findViewById<TextView>(R.id.question_answer_one)
+        val answerTwo = findViewById<TextView>(R.id.question_answer_two)
+        val answerThree = findViewById<TextView>(R.id.question_answer_three)
+        val answerFour = findViewById<TextView>(R.id.question_answer_four)
+
+        when(p0?.id) {
+            R.id.question_answer_one -> {
+                setSelectedAnswer(answerOne, 1)
+            }
+            R.id.question_answer_two -> {
+                setSelectedAnswer(answerTwo, 2)
+            }
+            R.id.question_answer_three -> {
+                setSelectedAnswer(answerThree, 3)
+            }
+            R.id.question_answer_four -> {
+                setSelectedAnswer(answerFour, 4)
+            }
+        }
+    }
+
+    private fun setSelectedAnswer (tv: TextView, selectAnswerNum: Int) {
+        setAllAnswerButtonsToDefaultColor()
+        mSelectedAnswerPosition = selectAnswerNum
+
+        tv.setTextColor(Color.parseColor("#000000"))
+        tv.setTypeface(tv.typeface, Typeface.BOLD)
+        tv.background = ContextCompat.getDrawable(
+            this,
+            R.drawable.selected_option_border_bg)
 
     }
 }
