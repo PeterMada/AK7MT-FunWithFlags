@@ -34,7 +34,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setQuestion() {
-        mCurrentPosition = 1
         val question = mQuestionList!![mCurrentPosition - 1]
 
         val questionTitle = findViewById<TextView>(R.id.question_title)
@@ -46,8 +45,15 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerTwo = findViewById<TextView>(R.id.question_answer_two)
         val answerThree = findViewById<TextView>(R.id.question_answer_three)
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
+        val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
         setAllAnswerButtonsToDefaultColor()
+
+        if(mCurrentPosition == mQuestionList!!.size) {
+            buttonSubmit.text = "FINISH"
+        } else {
+            buttonSubmit.text = "SUBMIT"
+        }
 
         questionTitle.text = question!!.question
         progressBar.progress = mCurrentPosition
@@ -125,6 +131,8 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                     } else {
                         buttonSubmit.text = "GO TO NEXT QUESTION"
                     }
+
+                    mSelectedAnswerPosition = 0
                 }
             }
         }
