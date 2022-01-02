@@ -34,10 +34,10 @@ object Constants {
         val question3 = Question(
             3,
             "Country ?",
-            R.drawable.ic_flag_of_germany,
+            R.drawable.ic_flag_of_denmark,
             "Argentina",
             "Austria",
-            "Germany",
+            "Denmark",
             "Russia",
             3
         )
