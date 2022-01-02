@@ -7,14 +7,22 @@ import android.widget.ProgressBar
 import android.widget.TextView
 
 class QuestionActivity : AppCompatActivity() {
+    private var mCurrentPosition:Int = 1
+    private var mQuestionList: ArrayList<Question>? = null
+    private var mSelectedAnswerPosition: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
 
-        val questionList = Constants.getQuestions()
+        mQuestionList = Constants.getQuestions()
+        setQuestion()
 
-        val currentQuestion = 1
-        val question: Question? = questionList[currentQuestion - 1]
+    }
+
+    private fun setQuestion() {
+        mCurrentPosition = 1
+        val question = mQuestionList!![mCurrentPosition - 1]
 
         val questionTitle = findViewById<TextView>(R.id.question_title)
         val progressBar = findViewById<ProgressBar>(R.id.question_progressBar)
@@ -27,14 +35,12 @@ class QuestionActivity : AppCompatActivity() {
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
 
         questionTitle.text = question!!.question
-        progressBar.progress = currentQuestion
-        progressBarText.text = "$currentQuestion" + "/" + progressBar.max
+        progressBar.progress = mCurrentPosition
+        progressBarText.text = "$mCurrentPosition" + "/" + progressBar.max
         questionImage.setImageResource(question.image)
         answerOne.text = question.answerOne
         answerTwo.text = question.answerTwo
         answerThree.text = question.answerThree
         answerFour.text = question.answerFour
-
-
     }
 }
