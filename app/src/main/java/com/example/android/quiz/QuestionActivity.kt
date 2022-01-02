@@ -12,6 +12,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int = 1
     private var mQuestionList: ArrayList<Question>? = null
     private var mSelectedAnswerPosition: Int = 0
+    private var mCorrectAnswers: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,6 +123,8 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
                     if(question!!.correctAnswer != mSelectedAnswerPosition) {
                         answerView(mSelectedAnswerPosition, R.drawable.wrong_option_border_bg)
+                    } else {
+                        mCorrectAnswers++
                     }
 
                     answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
