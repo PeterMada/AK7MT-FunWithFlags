@@ -1,5 +1,6 @@
 package com.example.android.quiz
 
+import android.animation.AnimatorSet
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
+import kotlin.system.exitProcess
+import android.content.DialogInterface
+import android.os.Process
+import androidx.appcompat.app.AlertDialog
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,4 +69,5 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
