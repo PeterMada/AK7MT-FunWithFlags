@@ -38,6 +38,15 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         buttonSubmit.setOnClickListener(this)
     }
 
+
+    override fun onBackPressed() {
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra(Constants.USER_NAME, mUserName)
+        intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+        intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
+        startActivity(intent)
+    }
+
     private fun setQuestion() {
         val question = mQuestionList!![mCurrentPosition - 1]
 
