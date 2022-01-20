@@ -48,4 +48,13 @@
         android:text="TextView"
         tools:layout_editor_absoluteX="169dp"
         tools:layout_editor_absoluteY="374dp" />
+
+    <Button
+        android:id="@+id/btn_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear results"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="632dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
