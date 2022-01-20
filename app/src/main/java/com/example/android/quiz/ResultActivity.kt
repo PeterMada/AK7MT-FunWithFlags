@@ -58,7 +58,7 @@ class ResultActivity : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.apply{
-            putString("STRING_KEY", "$userName score is $correctAnswers out of $totalQuestions")
+            putString("resultFor_$userName", "$userName score is $correctAnswers out of $totalQuestions")
         }.apply()
 
         Toast.makeText(this, "data saved", Toast.LENGTH_SHORT).show()
