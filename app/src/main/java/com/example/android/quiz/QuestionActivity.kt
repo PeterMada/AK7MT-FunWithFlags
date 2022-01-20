@@ -8,6 +8,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import android.content.DialogInterface
+
+import android.app.Activity
+import androidx.appcompat.app.AlertDialog
+
 
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int = 1
@@ -39,15 +44,44 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    override fun onBackPressed() {
-        val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra(Constants.USER_NAME, mUserName)
-        intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
-        intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
-        startActivity(intent)
-        finish()
+    override fun onBackPressed(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Androidly Alert")
+        builder.setMessage("We have a message")
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(Constants.USER_NAME, mUserName)
+            intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+            intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
+            startActivity(intent)
+            finish()
+        }
+
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+
+        }
+        builder.show()
+
     }
 
+    /*
+    fun onBackPressed(activity: Activity) {
+        val builder: AlertDialog.Builder = Builder(activity)
+        builder.setTitle(R.string.on_back_button_title)
+        builder.setMessage(R.string.on_back_button_message)
+        builder.setPositiveButton(R.string.yes, object : OnClickListener() {
+            fun onClick(dialog: DialogInterface?, which: Int) {
+                activity.finish()
+            }
+        })
+        builder.setNegativeButton(R.string.no, object : OnClickListener() {
+            fun onClick(dialog: DialogInterface?, which: Int) {}
+        })
+        builder.show()
+    }
+
+
+     */
     private fun setQuestion() {
         val question = mQuestionList!![mCurrentPosition - 1]
 
