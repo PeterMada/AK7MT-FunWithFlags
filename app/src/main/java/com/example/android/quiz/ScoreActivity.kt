@@ -14,13 +14,6 @@ class ScoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score)
 
-        /*
-        val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-        val savedString: String? = sharedPreferences.getString("STRING_KEY", null)
-        val textMsg = findViewById<TextView>(R.id.tv_text)
-        textMsg.text = savedString
-        */
-
         val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         val sharedPreferenceIds = sharedPreferences.all.map { it.key }
         val sharedPreferencesTexts = sharedPreferences.all.map {it.value}
