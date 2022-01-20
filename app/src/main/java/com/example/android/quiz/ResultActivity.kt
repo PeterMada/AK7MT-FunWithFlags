@@ -27,14 +27,6 @@ class ResultActivity : AppCompatActivity() {
         usernameEl.text = userName
         resultScoreEl.text = "Your score is $correctAnswers out of $totalQuestions"
 
-        /*
-        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
-        val editor:SharedPreferences.Editor =  sharedPreferences.edit()
-        editor.putInt("id_key",id)
-        editor.putString("name_key",name)
-        editor.apply()
-        editor.commit()
-*/
         saveData()
 
         finishBtn.setOnClickListener {
