@@ -48,7 +48,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Androidly Alert")
         builder.setMessage("We have a message")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        builder.setPositiveButton(android.R.string.yes) { _,_ ->
             val intent = Intent(this, ResultActivity::class.java)
             intent.putExtra(Constants.USER_NAME, mUserName)
             intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
@@ -57,31 +57,13 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             finish()
         }
 
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+        builder.setNegativeButton(android.R.string.no) { _,_ ->
 
         }
         builder.show()
 
     }
 
-    /*
-    fun onBackPressed(activity: Activity) {
-        val builder: AlertDialog.Builder = Builder(activity)
-        builder.setTitle(R.string.on_back_button_title)
-        builder.setMessage(R.string.on_back_button_message)
-        builder.setPositiveButton(R.string.yes, object : OnClickListener() {
-            fun onClick(dialog: DialogInterface?, which: Int) {
-                activity.finish()
-            }
-        })
-        builder.setNegativeButton(R.string.no, object : OnClickListener() {
-            fun onClick(dialog: DialogInterface?, which: Int) {}
-        })
-        builder.show()
-    }
-
-
-     */
     private fun setQuestion() {
         val question = mQuestionList!![mCurrentPosition - 1]
 
