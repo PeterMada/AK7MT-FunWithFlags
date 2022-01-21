@@ -8,7 +8,6 @@
     android:background="@drawable/ic_endless_constellation">
 
 
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
