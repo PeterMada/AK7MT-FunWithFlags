@@ -31,9 +31,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        getMyData()
-
-
         val btnStart = findViewById<Button>(R.id.btn_start)
         val inputText = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_text)
 
@@ -59,37 +56,6 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    private fun getMyData() {
-        val retrofitBuilder = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiInterface::class.java)
-
-        val retrofitData = retrofitBuilder.getData()
-
-        retrofitData.enqueue(object : Callback<List<CountriesItem>?> {
-            override fun onResponse(
-                call: Call<List<CountriesItem>?>,
-                response: Response<List<CountriesItem>?>
-            ) {
-                val responseBody = response.body()!!
-
-                val myStringBuilder = StringBuilder()
-                for(myData in responseBody) {
-                    myStringBuilder.append(myData.name)
-                    myStringBuilder.append("\n")
-                }
-
-                val testText = findViewById<TextView>(R.id.textView)
-                testText.text = myStringBuilder
-            }
-
-            override fun onFailure(call: Call<List<CountriesItem>?>, t: Throwable) {
-                Log.d("MainActivity", "onFailure" + t.message)
-            }
-        })
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
