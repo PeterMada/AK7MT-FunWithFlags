@@ -1,5 +1,6 @@
 package com.example.android.quiz
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -8,18 +9,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import android.content.DialogInterface
-
-import android.app.Activity
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.squareup.picasso.Picasso
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +39,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
         val questionListBody = intent.getStringExtra("allQuestions")
         val gson = Gson()
-        val questionList = gson.toJson(questionListBody)
         val collectionType: Type = object : TypeToken<ArrayList<CountriesItem?>?>() {}.type
         val deserialzieIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
 
@@ -58,7 +52,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
         val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
-       // mQuestionList = Constants.getQuestions()
         setQuestion()
 
         answerOne.setOnClickListener(this)
@@ -80,7 +73,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             intent.putExtra(Constants.USER_NAME, mUserName)
             intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
             intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
-            intent.putExtra("allQuestions", questionList);
+            intent.putExtra("allQuestions", questionList)
             startActivity(intent)
             finish()
         }
@@ -92,6 +85,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setQuestion() {
         val question = mQuestionList!![mCurrentPosition - 1]
 
@@ -180,7 +174,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                             intent.putExtra(Constants.USER_NAME, mUserName)
                             intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
                             intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
-                            intent.putExtra("allQuestions", questionList);
+                            intent.putExtra("allQuestions", questionList)
                             startActivity(intent)
                         }
                     }
@@ -293,7 +287,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             questionList.add(question)
         }
 
-        return questionList;
+        return questionList
     }
 
     fun generateRandom(start: Int, end: Int, excludeRows: ArrayList<Int?>): Int {
@@ -304,33 +298,5 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             random = rand.nextInt(range) + 1
         }
         return random
-    }
-
-
-    private fun getMyData() {
-        val retrofitBuilder = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiInterface::class.java)
-
-        val retrofitData = retrofitBuilder.getData()
-
-        retrofitData.enqueue(object : Callback<List<CountriesItem>?> {
-            override fun onResponse(
-                call: Call<List<CountriesItem>?>,
-                response: Response<List<CountriesItem>?>
-            ) {
-                val responseBody = response.body()!!
-
-
-                val allQuestions = makeDataUsable(responseBody)
-            }
-
-            override fun onFailure(call: Call<List<CountriesItem>?>, t: Throwable) {
-                Toast.makeText(applicationContext, "Data can not be loaded", Toast.LENGTH_LONG).show()
-                Log.d("SplashScreenActivity", "onFailure" + t.message)
-            }
-        })
     }
 }

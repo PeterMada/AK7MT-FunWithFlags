@@ -5,11 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.method.TextKeyListener.clear
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
-import android.widget.TextView
 
 class ScoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +18,7 @@ class ScoreActivity : AppCompatActivity() {
         val sharedPreferencesTexts = sharedPreferences.all.map {it.value}
 
 
-        val resultList = findViewById<ListView>(R.id.score_list);
+        val resultList = findViewById<ListView>(R.id.score_list)
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, sharedPreferencesTexts)
         resultList.adapter = adapter
@@ -32,14 +30,14 @@ class ScoreActivity : AppCompatActivity() {
         btnBack.setOnClickListener {
             val questionList = intent.getSerializableExtra("allQuestions")
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("allQuestions", questionList);
+            intent.putExtra("allQuestions", questionList)
             startActivity(intent)
             finish()
         }
 
         btnClear.setOnClickListener {
-            val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-            sharedPreferences.edit().clear().commit();
+            val sharedPreferencesBtnClick: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+            sharedPreferencesBtnClick.edit().clear().commit()
             startActivity(Intent(this, SplashScreenActivity::class.java))
             finish()
         }

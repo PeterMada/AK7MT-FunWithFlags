@@ -27,8 +27,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AboutActivity"
-            android:exported="true"
-            android:screenOrientation="portrait" />
+            android:exported="true" />
         <activity
             android:name=".ResultActivity"
             android:exported="true"
@@ -37,21 +36,13 @@
             android:name=".QuestionActivity"
             android:exported="true"
             android:noHistory="true"
-            android:theme="@style/QuizQuestionTheme"
-            android:screenOrientation="portrait" />
+            android:theme="@style/QuizQuestionTheme" />
         <activity
             android:name=".QuizActivity"
-            android:exported="true"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true"
-            android:label="Home"
-            android:screenOrientation="portrait" />
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
         </activity>
     </application>
 
