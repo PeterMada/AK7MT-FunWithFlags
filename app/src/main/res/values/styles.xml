@@ -5,6 +5,6 @@
     </style>
 
     <style name="QuizQuestionTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/genericbackground</item>
+        <item name="android:windowBackground" >@drawable/app_background</item>
     </style>
 </resources>
