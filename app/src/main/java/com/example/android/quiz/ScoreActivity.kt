@@ -18,6 +18,7 @@ class ScoreActivity : AppCompatActivity() {
         val sharedPreferenceIds = sharedPreferences.all.map { it.key }
         val sharedPreferencesTexts = sharedPreferences.all.map {it.value}
 
+
         val resultList = findViewById<ListView>(R.id.score_list);
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, sharedPreferencesTexts)

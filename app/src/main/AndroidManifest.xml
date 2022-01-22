@@ -37,6 +37,7 @@
             android:name=".QuestionActivity"
             android:exported="true"
             android:noHistory="true"
+            android:theme="@style/QuizQuestionTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".QuizActivity"

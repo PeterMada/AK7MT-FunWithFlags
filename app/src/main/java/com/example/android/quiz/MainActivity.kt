@@ -16,6 +16,7 @@ import android.os.Process
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,13 +24,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.StringBuilder
 
-const val BASE_URL = "https://restcountries.com/v2/"
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val questionList = intent.getSerializableExtra("allQuestions")
 
         val btnStart = findViewById<Button>(R.id.btn_start)
         val inputText = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_text)
@@ -38,8 +39,10 @@ class MainActivity : AppCompatActivity() {
             if(inputText.text.toString().isEmpty()) {
                 Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
             } else {
+
                 val intent = Intent(this, QuestionActivity::class.java)
                 intent.putExtra(Constants.USER_NAME, inputText.text.toString())
+                intent.putExtra("allQuestions", questionList);
                 startActivity(intent)
                 finish()
             }

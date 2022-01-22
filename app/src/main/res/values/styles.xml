@@ -2,6 +2,7 @@
 <resources>
 
     <style name="SplashScreenTheme" parent="Theme.AppCompat.NoActionBar">
-
     </style>
+
+    <style name="QuizQuestionTheme" parent="Theme.AppCompat.NoActionBar"></style>
 </resources>

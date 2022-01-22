@@ -8,6 +8,7 @@ object Constants {
     fun getQuestions(): ArrayList<Question> {
         val questionList = ArrayList<Question>()
 
+        /*
         val question1 = Question(
             1,
             "Country ?",
@@ -72,6 +73,8 @@ object Constants {
             4
         )
         questionList.add(question5)
+
+         */
 
         return questionList
     }

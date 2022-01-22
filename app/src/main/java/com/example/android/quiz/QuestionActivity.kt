@@ -11,8 +11,25 @@ import androidx.core.content.ContextCompat
 import android.content.DialogInterface
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.squareup.picasso.Picasso
+import java.util.*
+import kotlin.collections.ArrayList
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
 
+const val BASE_URL = "https://restcountries.com/v2/"
+const val NUMBER_OF_QUESTIONS = 5
 
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int = 1
@@ -25,6 +42,14 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
 
+        val questionListBody = intent.getStringExtra("allQuestions")
+        val gson = Gson()
+        val questionList = gson.toJson(questionListBody)
+        val collectionType: Type = object : TypeToken<ArrayList<CountriesItem?>?>() {}.type
+        val deserialzieIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
+
+        mQuestionList = makeDataUsable(deserialzieIt)
+
         mUserName = intent.getStringExtra(Constants.USER_NAME)
 
         val answerOne = findViewById<TextView>(R.id.question_answer_one)
@@ -33,7 +58,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
         val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
-        mQuestionList = Constants.getQuestions()
+       // mQuestionList = Constants.getQuestions()
         setQuestion()
 
         answerOne.setOnClickListener(this)
@@ -89,7 +114,9 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         questionTitle.text = question!!.question
         progressBar.progress = mCurrentPosition
         progressBarText.text = "$mCurrentPosition" + "/" + progressBar.max
-        questionImage.setImageResource(question.image)
+        //questionImage.setImageResource(question.image)
+        //Picasso.get().load(imageURL).into(questionImage)
+
         answerOne.text = question.answerOne
         answerTwo.text = question.answerTwo
         answerThree.text = question.answerThree
@@ -219,5 +246,87 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
         }
+    }
+
+
+    private fun makeDataUsable(responseBody: List<CountriesItem>): ArrayList<Question> {
+        val questionList = ArrayList<Question>()
+        val alreadyUsedQuestion = ArrayList<Int?>()
+        val test = responseBody.size
+        // make questions
+        for (i in 1..NUMBER_OF_QUESTIONS) {
+            val correctAnswerPosition = generateRandom(0, 4, ArrayList<Int?>())
+            val correctAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedQuestion)
+            alreadyUsedQuestion.add(correctAnswer)
+
+
+            val allAnswersInQuestion = ArrayList<Int>()
+
+            val alreadyUsedAnswersInOneQuestion = ArrayList<Int?>()
+            alreadyUsedAnswersInOneQuestion.add(correctAnswerPosition)
+
+            for (k in 1..4) {
+                val randomAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedAnswersInOneQuestion)
+                if (k == correctAnswerPosition) {
+                    allAnswersInQuestion.add(correctAnswer)
+                } else {
+                    allAnswersInQuestion.add(randomAnswer)
+                    alreadyUsedAnswersInOneQuestion.add(randomAnswer)
+                }
+            }
+
+
+            val question = Question(
+                i,
+                "Country ?",
+                responseBody[correctAnswer].flags.png,
+                responseBody[allAnswersInQuestion[0]].name,
+                responseBody[allAnswersInQuestion[1]].name,
+                responseBody[allAnswersInQuestion[2]].name,
+                responseBody[allAnswersInQuestion[3]].name,
+                correctAnswerPosition
+            )
+            questionList.add(question)
+        }
+
+        return questionList;
+    }
+
+    fun generateRandom(start: Int, end: Int, excludeRows: ArrayList<Int?>): Int {
+        val rand = Random()
+        val range = end - start + 1
+        var random: Int = rand.nextInt(range) + 1
+        while (excludeRows.contains(random)) {
+            random = rand.nextInt(range) + 1
+        }
+        return random
+    }
+
+
+    private fun getMyData() {
+        val retrofitBuilder = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .build()
+            .create(ApiInterface::class.java)
+
+        val retrofitData = retrofitBuilder.getData()
+
+        retrofitData.enqueue(object : Callback<List<CountriesItem>?> {
+            override fun onResponse(
+                call: Call<List<CountriesItem>?>,
+                response: Response<List<CountriesItem>?>
+            ) {
+                val responseBody = response.body()!!
+
+
+                val allQuestions = makeDataUsable(responseBody)
+            }
+
+            override fun onFailure(call: Call<List<CountriesItem>?>, t: Throwable) {
+                Toast.makeText(applicationContext, "Data can not be loaded", Toast.LENGTH_LONG).show()
+                Log.d("SplashScreenActivity", "onFailure" + t.message)
+            }
+        })
     }
 }
