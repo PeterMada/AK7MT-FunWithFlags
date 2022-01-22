@@ -30,15 +30,20 @@ class ResultActivity : AppCompatActivity() {
         saveData()
 
         finishBtn.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            val questionList = intent.getSerializableExtra("allQuestions")
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("allQuestions", questionList);
+            startActivity(intent)
             finish()
         }
     }
 
 
     override fun onBackPressed() {
+        val questionList = intent.getSerializableExtra("allQuestions")
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        intent.putExtra("allQuestions", questionList);
         finish()
     }
 

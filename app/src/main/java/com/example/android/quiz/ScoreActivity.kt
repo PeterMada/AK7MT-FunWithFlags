@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.TextKeyListener.clear
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 
@@ -15,7 +17,6 @@ class ScoreActivity : AppCompatActivity() {
         setContentView(R.layout.activity_score)
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-        val sharedPreferenceIds = sharedPreferences.all.map { it.key }
         val sharedPreferencesTexts = sharedPreferences.all.map {it.value}
 
 
@@ -24,12 +25,30 @@ class ScoreActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, sharedPreferencesTexts)
         resultList.adapter = adapter
 
+
+        val btnBack = findViewById<Button>(R.id.btn_back)
+        val btnClear = findViewById<Button>(R.id.btn_clear)
+
+        btnBack.setOnClickListener {
+            val questionList = intent.getSerializableExtra("allQuestions")
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("allQuestions", questionList);
+            startActivity(intent)
+            finish()
+        }
+
+        btnClear.setOnClickListener {
+            val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+            sharedPreferences.edit().clear().commit();
+            startActivity(Intent(this, SplashScreenActivity::class.java))
+            finish()
+        }
+
     }
 
 
     override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

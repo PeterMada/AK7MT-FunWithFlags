@@ -101,9 +101,6 @@ class SplashScreenActivity : AppCompatActivity() {
                     val gson = Gson()
                     val questionList = gson.toJson(responseBody)
 
-                    val collectionType: Type =
-                        object : TypeToken<Collection<CountriesItem?>?>() {}.type
-                    val deserialzieIt = gson.fromJson<ArrayList<CountriesItem>>(questionList, collectionType)
 
 
                     intent.putExtra("allQuestions", questionList);
@@ -132,7 +129,7 @@ class SplashScreenActivity : AppCompatActivity() {
         // make questions
         for (i in 1..NUMBER_OF_QUESTIONS) {
             val correctAnswerPosition = generateRandom(0, 4, ArrayList<Int?>())
-            val correctAnswer = generateRandom(0, responseBody.size - 1, alreadyUsedQuestion)
+            val correctAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedQuestion)
             alreadyUsedQuestion.add(correctAnswer)
 
 

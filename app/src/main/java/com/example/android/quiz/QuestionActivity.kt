@@ -70,6 +70,8 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
 
     override fun onBackPressed(){
+        val questionList = intent.getSerializableExtra("allQuestions")
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Androidly Alert")
         builder.setMessage("We have a message")
@@ -78,6 +80,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             intent.putExtra(Constants.USER_NAME, mUserName)
             intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
             intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
+            intent.putExtra("allQuestions", questionList);
             startActivity(intent)
             finish()
         }
@@ -115,7 +118,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         progressBar.progress = mCurrentPosition
         progressBarText.text = "$mCurrentPosition" + "/" + progressBar.max
         //questionImage.setImageResource(question.image)
-        //Picasso.get().load(imageURL).into(questionImage)
+        Picasso.get().load(question.image).into(questionImage)
 
         answerOne.text = question.answerOne
         answerTwo.text = question.answerTwo
@@ -172,10 +175,12 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                         mCurrentPosition <= mQuestionList!!.size -> {
                             setQuestion()
                         } else -> {
+                            val questionList = intent.getSerializableExtra("allQuestions")
                             val intent = Intent(this, ResultActivity::class.java)
                             intent.putExtra(Constants.USER_NAME, mUserName)
                             intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
                             intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
+                            intent.putExtra("allQuestions", questionList);
                             startActivity(intent)
                         }
                     }
@@ -252,13 +257,11 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private fun makeDataUsable(responseBody: List<CountriesItem>): ArrayList<Question> {
         val questionList = ArrayList<Question>()
         val alreadyUsedQuestion = ArrayList<Int?>()
-        val test = responseBody.size
-        // make questions
+
         for (i in 1..NUMBER_OF_QUESTIONS) {
-            val correctAnswerPosition = generateRandom(0, 4, ArrayList<Int?>())
+            val correctAnswerPosition = generateRandom(1, 4, ArrayList<Int?>())
             val correctAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedQuestion)
             alreadyUsedQuestion.add(correctAnswer)
-
 
             val allAnswersInQuestion = ArrayList<Int>()
 
@@ -266,6 +269,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             alreadyUsedAnswersInOneQuestion.add(correctAnswerPosition)
 
             for (k in 1..4) {
+                print(k)
                 val randomAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedAnswersInOneQuestion)
                 if (k == correctAnswerPosition) {
                     allAnswersInQuestion.add(correctAnswer)
