@@ -1,5 +1,7 @@
 package com.example.android.quiz
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -7,15 +9,36 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import com.squareup.picasso.Picasso
+import java.util.*
+import kotlin.collections.ArrayList
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
+
+const val BASE_URL = "https://restcountries.com/v2/"
+const val NUMBER_OF_QUESTIONS = 5
 
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int = 1
     private var mQuestionList: ArrayList<Question>? = null
     private var mSelectedAnswerPosition: Int = 0
+    private var mCorrectAnswers: Int = 0
+    private var mUserName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
+
+        val questionListBody = intent.getStringExtra("allQuestions")
+        val gson = Gson()
+        val collectionType: Type = object : TypeToken<ArrayList<CountriesItem?>?>() {}.type
+        val deserialzieIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
+
+        mQuestionList = makeDataUsable(deserialzieIt)
+
+        mUserName = intent.getStringExtra(Constants.USER_NAME)
 
         val answerOne = findViewById<TextView>(R.id.question_answer_one)
         val answerTwo = findViewById<TextView>(R.id.question_answer_two)
@@ -23,7 +46,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
         val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
-        mQuestionList = Constants.getQuestions()
         setQuestion()
 
         answerOne.setOnClickListener(this)
@@ -33,8 +55,32 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         buttonSubmit.setOnClickListener(this)
     }
 
+
+    override fun onBackPressed(){
+        val questionList = intent.getSerializableExtra("allQuestions")
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Androidly Alert")
+        builder.setMessage("We have a message")
+        builder.setPositiveButton(android.R.string.yes) { _,_ ->
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(Constants.USER_NAME, mUserName)
+            intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+            intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
+            intent.putExtra("allQuestions", questionList)
+            startActivity(intent)
+            finish()
+        }
+
+        builder.setNegativeButton(android.R.string.no) { _,_ ->
+
+        }
+        builder.show()
+
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun setQuestion() {
-        mCurrentPosition = 1
         val question = mQuestionList!![mCurrentPosition - 1]
 
         val questionTitle = findViewById<TextView>(R.id.question_title)
@@ -46,13 +92,22 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val answerTwo = findViewById<TextView>(R.id.question_answer_two)
         val answerThree = findViewById<TextView>(R.id.question_answer_three)
         val answerFour = findViewById<TextView>(R.id.question_answer_four)
+        val buttonSubmit = findViewById<Button>(R.id.question_submit)
 
         setAllAnswerButtonsToDefaultColor()
+
+        if(mCurrentPosition == mQuestionList!!.size) {
+            buttonSubmit.text = "FINISH"
+        } else {
+            buttonSubmit.text = "SUBMIT"
+        }
 
         questionTitle.text = question!!.question
         progressBar.progress = mCurrentPosition
         progressBarText.text = "$mCurrentPosition" + "/" + progressBar.max
-        questionImage.setImageResource(question.image)
+        //questionImage.setImageResource(question.image)
+        Picasso.get().load(question.image).into(questionImage)
+
         answerOne.text = question.answerOne
         answerTwo.text = question.answerTwo
         answerThree.text = question.answerThree
@@ -76,8 +131,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             option.typeface = Typeface.DEFAULT
             option.background = ContextCompat.getDrawable(this, R.drawable.default_option_border_bg)
         }
-
-
     }
 
     override fun onClick(p0: View?) {
@@ -108,7 +161,13 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                         mCurrentPosition <= mQuestionList!!.size -> {
                             setQuestion()
                         } else -> {
-                            Toast.makeText(this, "Quiz finished", Toast.LENGTH_SHORT).show()
+                            val questionList = intent.getSerializableExtra("allQuestions")
+                            val intent = Intent(this, ResultActivity::class.java)
+                            intent.putExtra(Constants.USER_NAME, mUserName)
+                            intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+                            intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionList!!.size)
+                            intent.putExtra("allQuestions", questionList)
+                            startActivity(intent)
                         }
                     }
                 } else {
@@ -116,6 +175,8 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
                     if(question!!.correctAnswer != mSelectedAnswerPosition) {
                         answerView(mSelectedAnswerPosition, R.drawable.wrong_option_border_bg)
+                    } else {
+                        mCorrectAnswers++
                     }
 
                     answerView(question.correctAnswer, R.drawable.correct_option_border_bg)
@@ -125,6 +186,8 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                     } else {
                         buttonSubmit.text = "GO TO NEXT QUESTION"
                     }
+
+                    mSelectedAnswerPosition = 0
                 }
             }
         }
@@ -174,5 +237,57 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
         }
+    }
+
+
+    private fun makeDataUsable(responseBody: List<CountriesItem>): ArrayList<Question> {
+        val questionList = ArrayList<Question>()
+        val alreadyUsedQuestion = ArrayList<Int?>()
+
+        for (i in 1..NUMBER_OF_QUESTIONS) {
+            val correctAnswerPosition = generateRandom(1, 4, ArrayList<Int?>())
+            val correctAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedQuestion)
+            alreadyUsedQuestion.add(correctAnswer)
+
+            val allAnswersInQuestion = ArrayList<Int>()
+
+            val alreadyUsedAnswersInOneQuestion = ArrayList<Int?>()
+            alreadyUsedAnswersInOneQuestion.add(correctAnswerPosition)
+
+            for (k in 1..4) {
+                print(k)
+                val randomAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedAnswersInOneQuestion)
+                if (k == correctAnswerPosition) {
+                    allAnswersInQuestion.add(correctAnswer)
+                } else {
+                    allAnswersInQuestion.add(randomAnswer)
+                    alreadyUsedAnswersInOneQuestion.add(randomAnswer)
+                }
+            }
+
+            val question = Question(
+                i,
+                "Country ?",
+                responseBody[correctAnswer].flags.png,
+                responseBody[allAnswersInQuestion[0]].name,
+                responseBody[allAnswersInQuestion[1]].name,
+                responseBody[allAnswersInQuestion[2]].name,
+                responseBody[allAnswersInQuestion[3]].name,
+                correctAnswerPosition
+            )
+            questionList.add(question)
+        }
+
+        return questionList
+    }
+
+    fun generateRandom(start: Int, end: Int, excludeRows: ArrayList<Int?>): Int {
+        val rand = Random()
+        val range = end - start + 1
+        var random: Int = rand.nextInt(range) + 1
+        while (excludeRows.contains(random)) {
+            random = rand.nextInt(range) + 1
+        }
+        return random
     }
 }

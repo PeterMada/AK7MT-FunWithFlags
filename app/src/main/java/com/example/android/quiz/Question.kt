@@ -3,7 +3,7 @@ package com.example.android.quiz
 class Question (
     val id: Int,
     val question: String,
-    val image: Int,
+    val image: String,
     val answerOne: String,
     val answerTwo: String,
     val answerThree: String,

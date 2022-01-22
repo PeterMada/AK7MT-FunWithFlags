@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/ic_endless_constellation">
+    tools:context=".MainActivity">
+
 
     <ImageView
         android:id="@+id/imageView"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:fontFamily="monospace"
-        android:text="Quiz"
+        android:text="@string/fun_with_flags"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
                 android:gravity="center"
-                android:text="Welcome"
+                android:text="@string/welcome"
                 android:textColor="@android:color/black"
                 android:textSize="34sp"
                 android:textStyle="bold" />
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Please enter your name" />
+                android:text="@string/please_enter_your_name" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                     android:id="@+id/et_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name">
+                    android:hint="@string/name">
 
                 </androidx.appcompat.widget.AppCompatEditText>
             </com.google.android.material.textfield.TextInputLayout>
@@ -95,7 +95,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="monospace"
                 android:gravity="center"
-                android:text="Start"
+                android:text="@string/start"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
