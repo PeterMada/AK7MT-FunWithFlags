@@ -9,18 +9,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.squareup.picasso.Picasso
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
 
 const val BASE_URL = "https://restcountries.com/v2/"
@@ -137,8 +131,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
             option.typeface = Typeface.DEFAULT
             option.background = ContextCompat.getDrawable(this, R.drawable.default_option_border_bg)
         }
-
-
     }
 
     override fun onClick(p0: View?) {
@@ -272,7 +264,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
                     alreadyUsedAnswersInOneQuestion.add(randomAnswer)
                 }
             }
-
 
             val question = Question(
                 i,
