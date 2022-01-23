@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val questionList = intent.getSerializableExtra("allQuestions")
-
         val btnStart = findViewById<Button>(R.id.btn_start)
         val inputText = findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_text)
 
@@ -23,7 +22,6 @@ class MainActivity : AppCompatActivity() {
             if(inputText.text.toString().isEmpty()) {
                 Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
             } else {
-
                 val intent = Intent(this, QuestionActivity::class.java)
                 intent.putExtra(Constants.USER_NAME, inputText.text.toString())
                 intent.putExtra("allQuestions", questionList)
@@ -41,7 +39,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         return when (item.itemId) {
             R.id.score -> {
                 startActivity(Intent(this, ScoreActivity::class.java))

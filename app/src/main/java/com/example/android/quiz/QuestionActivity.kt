@@ -17,9 +17,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-const val BASE_URL = "https://restcountries.com/v2/"
-const val NUMBER_OF_QUESTIONS = 5
-
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int = 1
     private var mQuestionList: ArrayList<Question>? = null
@@ -34,9 +31,9 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val questionListBody = intent.getStringExtra("allQuestions")
         val gson = Gson()
         val collectionType: Type = object : TypeToken<ArrayList<CountriesItem?>?>() {}.type
-        val deserialzieIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
+        val deserializeIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
 
-        mQuestionList = makeDataUsable(deserialzieIt)
+        mQuestionList = generateQuestions(deserializeIt)
 
         mUserName = intent.getStringExtra(Constants.USER_NAME)
 
@@ -105,7 +102,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         questionTitle.text = question!!.question
         progressBar.progress = mCurrentPosition
         progressBarText.text = "$mCurrentPosition" + "/" + progressBar.max
-        //questionImage.setImageResource(question.image)
         Picasso.get().load(question.image).into(questionImage)
 
         answerOne.text = question.answerOne
@@ -240,11 +236,11 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun makeDataUsable(responseBody: List<CountriesItem>): ArrayList<Question> {
+    private fun generateQuestions(responseBody: List<CountriesItem>): ArrayList<Question> {
         val questionList = ArrayList<Question>()
         val alreadyUsedQuestion = ArrayList<Int?>()
 
-        for (i in 1..NUMBER_OF_QUESTIONS) {
+        for (i in 1..Constants.NUMBER_OF_QUESTIONS) {
             val correctAnswerPosition = generateRandom(1, 4, ArrayList<Int?>())
             val correctAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedQuestion)
             alreadyUsedQuestion.add(correctAnswer)
@@ -267,7 +263,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
             val question = Question(
                 i,
-                "Country ?",
+                "This flag belongs to which country?",
                 responseBody[correctAnswer].flags.png,
                 responseBody[allAnswersInQuestion[0]].name,
                 responseBody[allAnswersInQuestion[1]].name,

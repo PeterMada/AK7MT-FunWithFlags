@@ -38,9 +38,6 @@
             android:noHistory="true"
             android:theme="@style/QuizQuestionTheme" />
         <activity
-            android:name=".QuizActivity"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>

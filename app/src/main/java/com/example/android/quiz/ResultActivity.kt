@@ -10,9 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 
 class ResultActivity : AppCompatActivity() {
-
-    private val sharedPrefFile = "com.example.quiz.score"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
@@ -20,10 +17,10 @@ class ResultActivity : AppCompatActivity() {
         val usernameEl = findViewById<TextView>(R.id.result_name)
         val resultScoreEl = findViewById<TextView>(R.id.result_score)
         val finishBtn = findViewById<Button>(R.id.result_finish)
-
         val userName = intent.getStringExtra(Constants.USER_NAME)
         val totalQuestions = intent.getIntExtra(Constants.TOTAL_QUESTIONS, 0)
         val correctAnswers = intent.getIntExtra(Constants.CORRECT_ANSWERS, 0)
+
         usernameEl.text = userName
         resultScoreEl.text = "Your score is $correctAnswers out of $totalQuestions"
 
@@ -32,7 +29,7 @@ class ResultActivity : AppCompatActivity() {
         finishBtn.setOnClickListener {
             val questionList = intent.getSerializableExtra("allQuestions")
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("allQuestions", questionList);
+            intent.putExtra("allQuestions", questionList)
             startActivity(intent)
             finish()
         }
@@ -43,7 +40,7 @@ class ResultActivity : AppCompatActivity() {
         val questionList = intent.getSerializableExtra("allQuestions")
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        intent.putExtra("allQuestions", questionList);
+        intent.putExtra("allQuestions", questionList)
         finish()
     }
 
@@ -58,7 +55,7 @@ class ResultActivity : AppCompatActivity() {
             putString("resultFor_$userName", "$userName score is $correctAnswers out of $totalQuestions")
         }.apply()
 
-        Toast.makeText(this, "data saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Data saved", Toast.LENGTH_SHORT).show()
     }
 
 }
