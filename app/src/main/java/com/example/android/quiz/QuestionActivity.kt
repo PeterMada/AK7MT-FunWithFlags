@@ -17,9 +17,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-const val BASE_URL = "https://restcountries.com/v2/"
-const val NUMBER_OF_QUESTIONS = 5
-
 class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int = 1
     private var mQuestionList: ArrayList<Question>? = null
@@ -244,7 +241,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val questionList = ArrayList<Question>()
         val alreadyUsedQuestion = ArrayList<Int?>()
 
-        for (i in 1..NUMBER_OF_QUESTIONS) {
+        for (i in 1..Constants.NUMBER_OF_QUESTIONS) {
             val correctAnswerPosition = generateRandom(1, 4, ArrayList<Int?>())
             val correctAnswer = generateRandom(0, responseBody.size - 2, alreadyUsedQuestion)
             alreadyUsedQuestion.add(correctAnswer)

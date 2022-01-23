@@ -29,7 +29,7 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun getMyData() {
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .build()
             .create(ApiInterface::class.java)
 
