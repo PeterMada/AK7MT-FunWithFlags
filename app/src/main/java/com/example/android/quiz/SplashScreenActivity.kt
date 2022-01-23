@@ -22,17 +22,16 @@ class SplashScreenActivity : AppCompatActivity() {
         splashIcon.alpha = 0f
 
         splashIcon.animate().setDuration(1000).alpha(1f)
-        getMyData()
 
+        getCountriesFromApi()
     }
 
-    private fun getMyData() {
+    private fun getCountriesFromApi() {
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(Constants.BASE_URL)
             .build()
             .create(ApiInterface::class.java)
-
         val retrofitData = retrofitBuilder.getData()
 
         retrofitData.enqueue(object : Callback<List<CountriesItem>?> {
@@ -53,7 +52,6 @@ class SplashScreenActivity : AppCompatActivity() {
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     finish()
                 }
-
             }
 
             override fun onFailure(call: Call<List<CountriesItem>?>, t: Throwable) {

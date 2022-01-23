@@ -31,9 +31,9 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         val questionListBody = intent.getStringExtra("allQuestions")
         val gson = Gson()
         val collectionType: Type = object : TypeToken<ArrayList<CountriesItem?>?>() {}.type
-        val deserialzieIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
+        val deserializeIt = gson.fromJson<ArrayList<CountriesItem>>(questionListBody, collectionType)
 
-        mQuestionList = makeDataUsable(deserialzieIt)
+        mQuestionList = generateQuestions(deserializeIt)
 
         mUserName = intent.getStringExtra(Constants.USER_NAME)
 
@@ -102,7 +102,6 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
         questionTitle.text = question!!.question
         progressBar.progress = mCurrentPosition
         progressBarText.text = "$mCurrentPosition" + "/" + progressBar.max
-        //questionImage.setImageResource(question.image)
         Picasso.get().load(question.image).into(questionImage)
 
         answerOne.text = question.answerOne
@@ -237,7 +236,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun makeDataUsable(responseBody: List<CountriesItem>): ArrayList<Question> {
+    private fun generateQuestions(responseBody: List<CountriesItem>): ArrayList<Question> {
         val questionList = ArrayList<Question>()
         val alreadyUsedQuestion = ArrayList<Int?>()
 
@@ -264,7 +263,7 @@ class QuestionActivity : AppCompatActivity(), View.OnClickListener {
 
             val question = Question(
                 i,
-                "Country ?",
+                "This flag belongs to which country?",
                 responseBody[correctAnswer].flags.png,
                 responseBody[allAnswersInQuestion[0]].name,
                 responseBody[allAnswersInQuestion[1]].name,

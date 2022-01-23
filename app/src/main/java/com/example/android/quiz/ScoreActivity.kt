@@ -13,19 +13,14 @@ class ScoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score)
+        val btnBack = findViewById<Button>(R.id.btn_back)
+        val btnClear = findViewById<Button>(R.id.btn_clear)
 
         val sharedPreferences: SharedPreferences = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         val sharedPreferencesTexts = sharedPreferences.all.map {it.value}
-
-
         val resultList = findViewById<ListView>(R.id.score_list)
-
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, sharedPreferencesTexts)
         resultList.adapter = adapter
-
-
-        val btnBack = findViewById<Button>(R.id.btn_back)
-        val btnClear = findViewById<Button>(R.id.btn_clear)
 
         btnBack.setOnClickListener {
             val questionList = intent.getSerializableExtra("allQuestions")

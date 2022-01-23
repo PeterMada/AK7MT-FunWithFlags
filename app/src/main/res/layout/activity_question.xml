@@ -21,8 +21,8 @@
             android:layout_margin="10dp"
             android:fontFamily="monospace"
             android:gravity="center"
-            android:text="Country?"
-            android:textColor="@android:color/black"
+            android:text="This flag belongs to which country?"
+            android:textColor="@android:color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
 
